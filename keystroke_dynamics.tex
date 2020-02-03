@@ -111,13 +111,13 @@
 In this course project, we will study keystroke dynamics as a method to authenticate people in online assessment situations. We will review the theory behind keystroke dynamics: why this method is useful, what math is inside the key approaches to keystroke analysis if this method works or not based on the findings of other researchers. In the practical part, we will run the keystroke analysis (its simplified version) on a large existing dataset to verify if this method works. We will also attempt to create our own small dataset of keystroke prints of our groupmates/acquaintances and test if our algorithm will work fine and will be able to identify people correctly. 
 \bigskip
 
-\large\textbf{Description of the Problem}
+\large\textbf{Introduction}
 \bigskip
 
 \normalsize
 Keystroke dynamics is a method to identify people using their typing patterns that is especially relevant for the tasks of online identity verification. While physiological biometrics (finger scan, iris scan, retina scan, hand scan, and facial scan) give very good precision, these methods are quite costly. Keystroke dynamics is less costly and a relatively accurate method to use by online education institutions. 
 
-Keystroke Dynamics can be used in a variety of areas:
+Keystroke Dynamics is now widely used in a variety of areas:
 
 \begin{itemize}
 	\item Authentication: Typing pattern can be used as an additional step in an authentication flow, to double-check if the password is being entered by the same person.
@@ -127,6 +127,8 @@ Keystroke Dynamics can be used in a variety of areas:
 	\item The detection of emotions: stress, calmness, anger could be detected thanks to the analysis of the way a user types the messages. 
 	\item Bank Security: In 2005, the Bank of Ireland added the keystroke dynamics algorithms to the user's authentication process. Since then keystroke dynamics became very popular among banks. Ecuador bank, Bank of Utah, and others use it in their authentication systems.
 \end{itemize}	
+
+In addition to the items above, the keystroke dynamics market \href{https://findbiometrics.com/amr-forecasts-booming-keystroke-dynamics-market/}{is expected to grow in the nearest future}.
 
 There are a multiple typing patterns that can be measured and analyzed in a keystroke dynamics: an amount of time a key is depressed, time between a previous key is down and next key is up, typing speed (the average number of keystrokes), overlapping of some key combinations, number of errors, while typing and so on. To track the patterns a keystroke digraph latency time is used: the time that lapses between the stroke of two adjacent letters. 
 
@@ -185,7 +187,6 @@ The typical raw data in the dataset looks like this:
 \end{text}
 
 Providing the preprocessing and cleaning steps, we've obtained the transition time (latency between key presses) and dwell time (the amount of time a key is depressed) for each of the users' keystrokes.
-
 
 Lets take a look at the transition time distribution in "Restaurant Reviews" dataset:
 \begin{center}
