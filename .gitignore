@@ -8,4 +8,5 @@
 *.synctex.gz
 .ipynb_checkpoints/*
 /temp/*
-/data/*
+#/data/*
+/data/merged_datasets.csv
