@@ -178,36 +178,91 @@ Interestingly, the simplest distance algorithms show the best results according 
 
 Other researchers have been questioning the results of Killourhy and Maxion, testing algorithms on different text inputs (long-text) and datasets (unconstrained datasets of free text). Overall, statistical and distance methods have been losing popularity, while machine learning approaches are gaining pace in the modern times \cite{Liakat:2017}. Support Vector Machine (SVM) is  considered by some researchers as a prevailing machine learning classification approach that produces good results and has reasonable complexity \cite{Liakat:2017}, \cite{raul2020comprehensive}.
 
+
 \bigskip
-\large\textbf{Sketch of the possible approaches }
+\large\textbf{Methodology }
 \bigskip
+
+\medskip
+\small\textbf{Z-SCORE Identification}
+\medskip
 
 \normalsize
-To analyze password-typing data we need a feature set that is contained from main metrics that measure the typing rhythm and the anomaly detection algorithm that measures the percentage of impostor passwords that are not detected and percentage of genuine user passwords that are mistakenly detected as impostors.  
 
-The classic anomaly-detection algorithm \cite{duda2001_patternClass} models each password as a point in p-dimensional space, where p - is the number of features in the timing vectors. It treats the training data as a cloud of points and computes the anomaly score of the test vector based on its proximity to the center of this cloud. Specifically, in the training phase, the mean vector of the set of timing vectors is calculated. In the test phase, the anomaly score is calculated as the squared Euclidean distance between the test vector and the mean vector.
+Killourhy and Maxion \cite{killourhy2009comparing} used Outlier Count (z-score) detector to authenticate impostors, and this simple statistical method displayed quite good results: the thirds lowest equal-error rate among the 14 detectors (see table above).  The idea of the method by Kollourhy and Maxion is to calculate mean vector $m_i$ and standard deviation vector $s_i$ for each feature of each known subject at the training phase. Then in the test phase the authors calculate the absolute z-score of each feature $i$ of the test vector: $|x_i-m_i|/s_i$. The anomaly score is a count how often the calculated z-score exceeds a threshold of 1.96. If the number is large (the authors do not specify how large), a subject is set to be an impostor. 
 
-There are a lot of modifications of measuring the distance between the test vector and the mean vector: distance can be normalized and scaled, as a distance can be taken the Manhattan or Mahalanobis distance. 
-The are other approaches in evaluating the anomaly score. The nearest-neighbor algorithm solves a classification problem using the mentioned distances. A neural network can reproduce the input feature vector as the output or simply calculate the anomaly score on the output layer. To detect the anomaly score, the fuzzy algorithm can be used. The key idea is that the ranges of typing times are assigned to fuzzy sets. The sets are called fuzzy because elements can partially belong to a set. In the training phase, the detector determines how strongly each feature belongs to each set, and each feature is matched with the set in which its membership is strongest. In the test phase, each timing feature is checked to see if it belongs to the same set as the training data. The anomaly score is calculated as the average lack of membership across all test vector timing features. SVM algorithms project the data from a single class and find a separator between the projection and the origin.
+We used the Outlier Count (z-score) method with some modifications for our identification goal. We calculate mean $m$ and standard deviation vectors $std$, that are $k \times 1$ vectors with means and standard deviations of each feature in Copy 1 text for a subset of our subjects in the train phase. In this method the number of features k is equal to 21.\\
+\\
+$
+\overline{m} = \frac{1}{n}i^T x
+$\\
+\\
+ where $x$ is a $n\times 1$ dimensional time vector of the feature $i$ in the Copy 1 task. $n$ is a count of the $ith$ feature occurrence in the Copy1 text of each subject in the train set. \\
+$
+\\
+s^2 = \frac{1}{n-1} x^T M x
+$\\
+\\
+where M  is an idempotent matrix: \\
+\\
+$
+M = I - \frac{1}{n}ii^T
+$\\
 
-\newpage
-\bigskip
-\large\textbf{Short explanations of the pros and cons of your chosen method}
-\bigskip
+where $x$ is a $n\times 1$ dimensional time vector of the feature $i$ in the Copy 1 task. $n$ is a count of the $ith$ feature occurrence in the Copy1 text of each subject in the train set.\\
+\\
+In the test phase we calculate z-score, a $n \times m$ matrix. N is a number of features (21 for this method), while m is the maximum occurrence of a feature for a subject in the test phase.\\
+\\
+$
+zscore = \frac{|X^{test} - m|}{s}
+$ \\
+\\
+where $X^{test}$ is a $n\times m$ matrix of the $ith$ feature in the texts of subjects in the test set. $M$ is equal to the length of the largest feature vector for a given subject in the test phase. \\
+\\
+In the next step we construct Zcount matrix, that $n \times m$ matrix such that:
+\\
+$
+zcount_{rule} = \begin{cases} 1, & \mbox{if } zscore \mbox{ $<$ 1.96} \\ 0, & \mbox{ } \mbox{ otherwise} \end{cases}
+$\\
+\\
+Next, we need the vector that count relative number of times each feature is accepted (smaller than our threshold). To make $zcount_r$ vector (a $n \times 1$ vector) we sum each row of of the Zcount matrix and divide by the count of 1s in each row. \\
+\\
+The closer this $zcount_r$ vector to a vector of ones (i vector), the closer is a tested subject's keyprint style to true subject. To find out this distance we use the Euclidian distance metric: \\
+\\
+$
+d = ||zcount_r - i||
+$\\
+\\
+The subject and task with the smallest distance is the predicted subject. Accuracy measure is the relative number of times we correctly predict the true subject.
+
+
+\small\textbf{PSEUDOCODE}
 
 \normalsize
-We will try to implement the classification KNN algorithm.\\
-Pros:
-\begin{itemize}
-    \item pretty simple to interpret;
-    \item a good algorithm to model nonlinear data. 
-\end{itemize}
 
+\begin{lstlisting}
+FOR user in TRAIN_SET:
+    true_user = user
+    mean(x) <- get the mean vector for the user
+    std(x) <- get the std vector for the user
+    for user_test in TEST_SET:
+        for tasks in [copy1, copy2, true, false]:
+            f = get_features(user, taks) <- features matrix of user, task
+            Zscore = abs(f-mean(x)/std(x) <- matrix of z scores
+            zrule = if (r < threshold) than 1, else 0
+            Zcount = Zscore apply zrule
+            zcount_result = sum(Zcount by row)/count(1s in each row)
+            ones <- vector of 1s
+            d = distance_euclidean(zcount_result, ones)
+        predicted_user = user with the minimum d
+    if predicted_user == true_user:
+            accuracy.append(1)
+    else:
+            accuracy.append(0)
+            
+ACCURACY = SUM(accuracy)/len(accurancy)
 
-Cons:
-\begin{itemize}
-    \item computationally expensive. 
-\end{itemize}
+\end{lstlisting}
 
 
 
@@ -216,44 +271,54 @@ Cons:
 \bigskip
 
 \normalsize
-There are some datasets containing repeated data, but they are too small for the task. For example, the dataset containing the same passwords inputted by 50 different users might be good for the baseline test of the proof of concept, but it is not enough to achieve any robust judgments.
-We have chosen the  \href{http://www3.cs.stonybrook.edu/~rbanerjee/project-pages/keystrokes/keystrokes.html}{Keystroke Patterns as Prosody in Digital Writings} dataset \cite{banerjee2014_emnlp}. It contains of 3 datasets: \begin{itemize}
+For our work we have chosen the  \href{http://www3.cs.stonybrook.edu/~rbanerjee/project-pages/keystrokes/keystrokes.html}{Keystroke Patterns as Prosody in Digital Writings} data \cite{banerjee2014_emnlp} that contains 3 datasets: \begin{itemize}
 	\item \textbf{Restaurant Reviews}: The dataset consists of 1000 unique restoran reviews inputed by 500 unique users
 	\item \textbf{Gun Control}: The dataset consists of 800 unique essays on "Gun Control" from 400 unique users
 	\item \textbf{Gay Marriage}: The dataset consists of 800 unique essays on "Gay Merriage" topic  from 400 unique users
-\end{itemize}
+\end{itemize}.
+The datasets were collected for the paper on using keystroke dynamics for 
+deception detection (recognizing deceptive/fake text) \cite{banerjee2014_emnlp}. The authors collected the data via Amazon Mechanical Turk. The Turkers were asked to write 2 free texts: a truthful (true) and deceptive (fake) texts. There were restaurant reviews, opinions on gay marriages and gun control (stored in three separate datasets). After completing their two review(true and fake), each Turker was asked to copy their own typing: copy1 is a copy of true text and copy2 is a copy of fake text (or vice versa). Therefore, the dataset contains keystroke samples for two free texts and the same re-typed copied texts. We merged all 3 datasets into 1 and used it in our analysis. \\
 
-The typical raw data in the dataset looks like this:
+The authors opened access to their dataset. The typical raw data looks like this: 
 \bigskip
 
 \begin{text}
 	0 MouseUp 0 0;16705 KeyDown 16;17170 KeyDown 16;17200 KeyDown 16;17229 KeyDown 16;17258 KeyDown 16;17287 KeyDown 16;17317 KeyDown 16;17346 KeyDown 16;17375 KeyDown 16;17404 KeyDown 16;17433 KeyDown 16;17463 KeyDown 16;17492 KeyDown 16; ...
 \end{text}
+\bigskip
 
-Providing the preprocessing and cleaning steps, we've obtained the transition time (latency between key presses) and dwell time (the amount of time a key is depressed) for each of the users' keystrokes.
-
-Lets take a look at the transition time distribution in "Restaurant Reviews" dataset:
-\begin{center}
-\centering
-\includegraphics[width=0.85\linewidth]{images/transitions_time.png}
-\end{center}
-
-and dwell time distribution:
-
-\begin{center}
-	\includegraphics[width=0.85\linewidth]{images/dwells_time.png}
-	\label{fig:transitions_time.png}
-\end{center}
-
-As we see, both distributions are close to normal. They also do not deverge a lot from the distributions obtained in Richards Young dissertation \cite{richards_young_2018}.
-We also filered out the characters that had too low occurency number.
+We used the raw data to extract the timing features described in the next section.
 
 \bigskip
-\large\textbf{Future steps}
+\large\textbf{Features Extraction}
 \bigskip
+
 \normalsize
 
-We expect to build a model which finds the closest typing patterns to the one we've obtained.
+In our work we use most common features for keystroke dynamics: \textbf{dwell time} (the latency between pressing and releasing a key) and \textbf{flight time} (in our case a time between key downs of two successive keys(\textbf{digraphs})). In our dataset we have 105 dwell times of unique keys/letter and 3099 flight times of unique digraphs, jointly 3204 features. Many of the features are not relevant, thus, we use the approach recommended in \cite{tappert2012keystroke}. \\
+
+We use the dwell time of the 8 most frequent keys/letters, in our case: 
+'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N. \\
+
+To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5×IQR$ or above $Q3 + 1.5×IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
+
+\bigskip
+\large\textbf{Results}
+\bigskip
+
+\medskip
+\small\textbf{Z-SCORE Identification}
+\medskip
+
+\normalsize
+
+We tested our Z-score identification methodology on 3 randomly selected subsets of subjects: 20, 50 and 100 subjects. We obtained the corresponding accuracy metrics of 80\%, 68\% and 57\%. The prevailing share of the correctly identified subjects were recognized by copy2 text: within 57 \% of correctly selected subjects, 60 \% where recognized by copy2 texts, 17 \% by true reviews and 21 \% by fake reviews. This results prove that keystroke patterns for free text and pre-defined re-typed text are different, as the algorithm recognized primarily not the same texts with the same features (copy1 text of a user is the same with either true or fake reviews), but the re-typing keyprint pattern of a user for a different text.
+
+As expected, accuracy scores are relatively small. We had a small text dataset for a user: our model is trained on 1 text sample with no repetitions. Moreover, long texts (as well as free text) requires more sophisticated feature extraction techniques, as simple digraphs work good for passwords, usernames and digits, while in long text not only digraphs, but their positioning is potentially important. Moreover, not all features are equally important - some of them are more discriminating than the other, while in our z-score algorithm all features are treated equally, also disregarding how often they appear in the text of a given subject.
+
+
+
+
 
 \bibliography{keystroke_dynamics}{}
 \bibliographystyle{plain}
