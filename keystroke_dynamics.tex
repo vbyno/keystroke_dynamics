@@ -135,6 +135,50 @@ There are a multiple typing patterns that can be measured and analyzed in a keys
 Keystroke dynamics is not static: it can change as skills of a typing person increase or her health status is changed (for instance, finger injury). This requires re-collecting and updating typing datasets, which is relatively inexpensive. Data scientists can gather much additional information: typing patterns, when a person is standing or sitting, when her finger is injured, when she is coping some text or in opposite prints freely, etc. In our project, we will analyze basic typing patterns to simplify our work, although the precision will certainly be smaller.
 
 \bigskip
+
+\large\textbf{Literature Review}
+\bigskip
+
+\normalsize
+The earliest start of significant keystroke dynamics (KD) research dates back to late 1970s and early 1980s \cite{Teh:2013}, \cite{Liakat:2017}, \cite{killourhy2009comparing}. After 2003 the number of papers on KD increased significantly, indicating a high interest in the topic \cite{Teh:2013}. Indeed, google scholar returns 62 publications on KD in 2000, 103 in 2003, 232 in 2005 and 995 in 2019, implying a 16 times boost in number of publications between 2000 and 2019. The research on KD varies a lot in their topics (verification vs identification), platform (desktop vs mobile/ tablet), data-collection strategies (size, input type), feature sets, static or dynamic character etc.
+
+The KD publications that focus on verification (the process of proving a validity of claimed identity) outnumber identification (the processes of recognizing a presented identity), as the latter is time-consuming and requires more processing capacities \cite{Teh:2013}, \cite{banerjee2014_emnlp}. Most of the publications on KD do their research on a relatively small dataset involving 21-50 people, typically scholars or students from the researchers’ institution capacities [1,6]. According to the research of 2016, 40 \% out of 88 of the KD publications reviewed involved 21-50 participants, while the reviews of up to 20 and over 100 people accounted for 24 \% each \cite{Liakat:2017}. In recent years KD researchers have more opportunities to expand the number of participants involved and size of collected datasets.
+
+The KD research can deal with a short-text input (password, username, short text phrase, digits) or long-text (over 100 words). The latter can be unconstrained free-text that is often used in continuous authentication systems - systems that dynamically check users’ identities while they are typing. In the review of 2016 the short-text and digits publications account for 60 \% out of 88, while long-text publications take a 22 \% share \cite{Liakat:2017}.
+
+The most common features that are used in the KD research are timing measures: dwell time (the time interval between press of a key and its release) and flight time (the time interval between releasing one key and pressing the other). Most of the researchers use di-graphs: timing measures between two consecutive keys, but n-graphs (three or more keys) can be also used). Other features used by researchers are mouse position / movement, pressure, text correction features, frequencies of errors, average typing speed / acceleration, etc.
+
+There are also a variety of methods to analyze keystroke data that can be grouped as statistical methods (mean, deviations, t-tests, outlier count (z-score), chi-squared, Bayesian modelling, logistic regression, etc.), distance measures (Euclidean, Manhattan, Mahalanobis, Chebyshev, other distance-based measures) and machine learning methods (Artificial Neural Networks, decision trees, KNN, random forest, SVM, etc.). However, it is hard to compare performance and accuracy metrics of different methods, as different authors use different databases, sets of features, model parameters, input types, modes (static or dynamic), etc. There is a benchmark research of Killourhy and Maxion that dates back to 2009, where the authors collect (and make it public) a dataset and compare 14 different methods (detectors) in similar settings \cite{killourhy2009comparing}.
+
+Killourhy and Maxion selected  a 10-character password “.tie5Roanl” , recruited 51 people who were asked to type the password 400 times in 8 sessions. The feature set used included  Keydown-Keydown time between consecutive keys (in some publications referred to as latency), dwell time and flight time. And the authors used 14 algorithms (detectors) that had produced promising results in research of other scientists for authentication of potential impostors. The best-performing algorithms are defined, using two metrics: equal-error rate / ERR (a threshold to discriminate a potential impostor is chosen to have equal miss and false alarm rates) and zero-miss false-alarm rate / ZMFAR (a threshold is selected in a way that a miss rate is 0 and false alarm rate is minimized). We list the top 5 using these 2 metrics in the table below:
+
+\begin{center}
+
+\begin{tabular*}{\textwidth}{l @{\extracolsep{\fill}} lllll}
+
+\hline
+ & \textbf{Detector} & \textbf{EER} & & \textbf{Detector} & \textbf{ZMFAR} \\
+ \hline
+1. & Manhattan (scaled) & 0.096 & 1. & Nearest Neighbor (Mahalanobis) & 0.468 \\ 
+\hline
+2. & Nearest Neighbor (Mahalanobis) & 0.100 & 2. & Mahalanobis & 0.482 \\ 
+\hline
+3. & Outlier Count (z-score) & 0.102 & 3. & Mahalanobis (normed) & 0.482 \\
+
+\hline
+4. & SVM (one-class) & 0.102 & 4. & SVM (one-class) & 0.504 \\
+\hline
+5. & Mahalanobis & 0.110 & 5. & Manhattan (scaled) & 0.601 \\
+\hline
+\end{tabular*}
+\textbf{Table 1:} The best algorithms / detectors for KD authentication by Killourhy and Maxion
+\end{center}
+
+Interestingly, the simplest distance algorithms show the best results according to Killourhy and Maxion. There is also a good score for a machine learning SVM detector and a statistical z-score method. Neural Networks (standard) and k-means give the worst results out of 14 algorithms tested.
+
+Other researchers have been questioning the results of Killourhy and Maxion, testing algorithms on different text inputs (long-text) and datasets (unconstrained datasets of free text). Overall, statistical and distance methods have been losing popularity, while machine learning approaches are gaining pace in the modern times \cite{Liakat:2017}. Support Vector Machine (SVM) is  considered by some researchers as a prevailing machine learning classification approach that produces good results and has reasonable complexity \cite{Liakat:2017}, \cite{raul2020comprehensive}.
+
+\bigskip
 \large\textbf{Sketch of the possible approaches }
 \bigskip
 
