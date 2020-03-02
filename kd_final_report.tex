@@ -205,6 +205,22 @@ The authors opened access to their dataset. The typical raw data looks like this
 We used the raw data to extract the timing features described in the next section.
 
 \bigskip
+\large\textbf{Web Application}
+\bigskip
+
+\normalsize
+In order to collect our own data, we've created and deployed a \href{https://powerful-spire-05992.herokuapp.com/}{web application}. It collects keystroke metadata upon user enters the suggested text. It also checks if the text is valid and responds if user made a mistake.
+
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{images/web-app.png}
+	\label{fig:web-app.png}
+\end{center}
+The user has to login to start to enter the text. After a user submits entered text, the keystroke metadata is saved in the database. 
+Predefined admin users could download the keystroke data of all users. Although the keystroke data is anonymized, it does not contain the user's login/email or other personal data. It is mapped to self-generated UUID which is unique for each user. So, it is possible to distinguish the keystroke patterns and use this data for model learning.
+
+At the current moment, we've collected 28 text inputs from 17 unique users.
+
+\bigskip
 \large\textbf{Features Extraction}
 \bigskip
 
@@ -212,7 +228,7 @@ We used the raw data to extract the timing features described in the next sectio
 
 In our work we use most common features for keystroke dynamics: \textbf{dwell time} (the latency between pressing and releasing a key) and \textbf{flight time} (in our case a time between key downs of two successive keys(\textbf{digraphs})). In our dataset we have 105 dwell times of unique keys/letter and 3099 flight times of unique digraphs, jointly 3204 features. Many of the features are not relevant, thus, we use the approach recommended in \cite{tappert2012keystroke}. \\
 
-We use the dwell time of the 8 most frequent keys/letters, in our case: 
+As the starting point we used the dwell time of the 8 most frequent keys/letters, in our case: 
 'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N. \\
 
 To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5\times IQR$ or above $Q3 + 1.5 \times IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
@@ -263,9 +279,8 @@ $$
 d = ||zcount_r - i||
 $$
 
-The subject and task with the smallest distance is the predicted subject. Accuracy measure is the relative number of times we correctly predict the true subject.
-
-\newpage
+The subject and task with the smallest distance is the predicted subject. Accuracy measure is the relative number of times we correctly predict the true subject.\\
+\\
 \small\textbf{PSEUDOCODE}
 
 \normalsize
