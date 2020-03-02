@@ -108,31 +108,32 @@
 \bigskip
 
 \normalsize
-In this course project, we will study keystroke dynamics as a method to authenticate people in online assessment situations. We will review the theory behind keystroke dynamics: why this method is useful, what math is inside the key approaches to keystroke analysis if this method works or not based on the findings of other researchers. In the practical part, we will run the keystroke analysis (its simplified version) on a large existing dataset to verify if this method works. We will also attempt to create our own small dataset of keystroke prints of our groupmates/acquaintances and test if our algorithm will work fine and will be able to identify people correctly. 
+In this course project, we will study keystroke dynamics as a method to identify people, using their typing rhythms. We use z-score and KNN methods that perform well on tasks of people authentication based on small text inputs, to recognize identity of a person, using her predefined (re-typed) large text input. We verify how well unconstrained free text typing patterns of a person help to identify her if we know how this person re-types the same text input. We also compare performance of z-score and KNN methods for the identification tasks. 
+
 \bigskip
 
 \large\textbf{Introduction}
 \bigskip
 
 \normalsize
-Keystroke dynamics is a method to identify people using their typing patterns that is especially relevant for the tasks of online identity verification. While physiological biometrics (finger scan, iris scan, retina scan, hand scan, and facial scan) give very good precision, these methods are quite costly. Keystroke dynamics is less costly and a relatively accurate method to use by online education institutions. 
+Keystroke dynamics (KD) uses the natural rhythm of user typing to identify , authenticate a person, constantly monitor his/her identity or even classify a person.  While physiological biometrics (finger scan, iris scan, retina scan, hand scan, and facial scan) give very good precision, these methods are quite costly for identification and authentication purposes. Keystroke dynamics is less costly, unobtrusive and a relatively accurate method.
 
-Keystroke Dynamics is now widely used in a variety of areas:
+KD can be used as an additional authentication step to check if the password is being entered by the right person, what can help against fraud or cheating. Thus, in 2005 the Bank of Ireland added the keystroke dynamics algorithms to the user's authentication process and other banks followed \cite{usman1970strengthening}. KD is a good tool to constantly monitor a typing person's identity that is of great importance for online education institutions and online testing/exams. Cheating and manipulations must be eliminated to certify students and prove their competence. Finally, the most recent use is creating a user's profile and detection of emotions/diseases based on his/her typing patterns.
 
-\begin{itemize}
-	\item Authentication: Typing pattern can be used as an additional step in an authentication flow, to double-check if the password is being entered by the same person.
-	\item Online education platforms: there is a growing need to recognize actual and reduce potential cheating of students. Cheating and manipulations must be eliminated to certify students and prove their competence. 
-	\item Marketing: The sites could build their marketing strategy based on the visitors' typing patterns. With the high rate of probability, they can create a user's profile based on typing patterns and display relevant advertisements even before the user actually creates a profile. 
-	\item Fraud detection: Keystroke dynamics can help identify attackers even though they are anonymous. They can be detected without even being authenticated.
-	\item The detection of emotions: stress, calmness, anger could be detected thanks to the analysis of the way a user types the messages. 
-	\item Bank Security: In 2005, the Bank of Ireland added the keystroke dynamics algorithms to the user's authentication process. Since then keystroke dynamics became very popular among banks. Ecuador bank, Bank of Utah, and others use it in their authentication systems.
-\end{itemize}	
+Research on keystroke dynamics has gained pace since 2003, many simple and more sophisticated methods were applied, although the  European standard for access-control systems of a false-alarm rate of less than 1\%, with a miss rate of less than 0.001\%, to our knowledge, has not been achieved. Moreover, there is less research on free/large texts compared to short inputs (passwords, usernames) and very few (if any) on difference in typing patterns for free (unconstrained) texts and predefined texts inputs. Also, the majority of KD papers focus on authentication goals rather than identification (recognizing a typing person), leaving this area under-researched.
 
-In addition to the items above, the keystroke dynamics market \href{https://findbiometrics.com/amr-forecasts-booming-keystroke-dynamics-market/}{is expected to grow in the nearest future}.
+In this report we use two simple statistical and machine learning algorithms, Z-score and KNN, for person identification based on an open dataset of large free and predefined texts. Our goal is to check how  the methods and features that work well on small inputs (passwords, usernames) perform on larger-size inputs and free texts.
 
-There are a multiple typing patterns that can be measured and analyzed in a keystroke dynamics: an amount of time a key is depressed, time between a previous key is down and next key is up, typing speed (the average number of keystrokes), overlapping of some key combinations, number of errors, while typing and so on. To track the patterns a keystroke digraph latency time is used: the time that lapses between the stroke of two adjacent letters. 
+\bigskip
+\large\textbf{Research Question and Hypotheses}
+\bigskip
 
-Keystroke dynamics is not static: it can change as skills of a typing person increase or her health status is changed (for instance, finger injury). This requires re-collecting and updating typing datasets, which is relatively inexpensive. Data scientists can gather much additional information: typing patterns, when a person is standing or sitting, when her finger is injured, when she is coping some text or in opposite prints freely, etc. In our project, we will analyze basic typing patterns to simplify our work, although the precision will certainly be smaller.
+\normalsize
+\textbf{Research Question:} How accurately we can define a person's identity with z-score and KNN algorithms, using a large pre-defined and free text inputs? \\
+
+\textbf{Hypothesis 1}: Z-score and KNN help to identify a user of large text inputs, but accuracy is smaller compared to small inputs. \\
+
+\textbf{Hypothesis 2}: Free (unconstrained) text inputs can help to identify the identity of a person, who typed a predefined text input. 
 
 \bigskip
 
@@ -178,6 +179,43 @@ Interestingly, the simplest distance algorithms show the best results according 
 
 Other researchers have been questioning the results of Killourhy and Maxion, testing algorithms on different text inputs (long-text) and datasets (unconstrained datasets of free text). Overall, statistical and distance methods have been losing popularity, while machine learning approaches are gaining pace in the modern times \cite{Liakat:2017}. Support Vector Machine (SVM) is  considered by some researchers as a prevailing machine learning classification approach that produces good results and has reasonable complexity \cite{Liakat:2017}, \cite{raul2020comprehensive}.
 
+Concerning identification research, scholars also show quite good accuracy (over 90\%)\cite{banerjee2012biometric}, however, the number of subjects are usually small - below 35 people. 
+
+\bigskip
+\large\textbf{Dataset}
+\bigskip
+
+\normalsize
+For our work we have chosen the  \href{http://www3.cs.stonybrook.edu/~rbanerjee/project-pages/keystrokes/keystrokes.html}{Keystroke Patterns as Prosody in Digital Writings} data \cite{banerjee2014_emnlp} that contains 3 datasets: \begin{itemize}
+	\item \textbf{Restaurant Reviews}: The dataset consists of 1000 unique restoran reviews inputed by 500 unique users
+	\item \textbf{Gun Control}: The dataset consists of 800 unique essays on "Gun Control" from 400 unique users
+	\item \textbf{Gay Marriage}: The dataset consists of 800 unique essays on "Gay Merriage" topic  from 400 unique users
+\end{itemize}.
+The datasets were collected for the paper on using keystroke dynamics for 
+deception detection (recognizing deceptive/fake text) \cite{banerjee2014_emnlp}. The authors collected the data via Amazon Mechanical Turk. The Turkers were asked to write 2 free texts: a truthful (true) and deceptive (fake) texts. There were restaurant reviews, opinions on gay marriages and gun control (stored in three separate datasets). After completing their two review(true and fake), each Turker was asked to copy their own typing: copy1 is a copy of true text and copy2 is a copy of fake text (or vice versa). Therefore, the dataset contains keystroke samples for two free texts and the same re-typed copied texts. We merged all 3 datasets into 1 and used it in our analysis. \\
+
+The authors opened access to their dataset. The typical raw data looks like this: 
+\bigskip
+
+\begin{text}
+	0 MouseUp 0 0;16705 KeyDown 16;17170 KeyDown 16;17200 KeyDown 16;17229 KeyDown 16;17258 KeyDown 16;17287 KeyDown 16;17317 KeyDown 16;17346 KeyDown 16;17375 KeyDown 16;17404 KeyDown 16;17433 KeyDown 16;17463 KeyDown 16;17492 KeyDown 16; ...
+\end{text}
+\bigskip
+
+We used the raw data to extract the timing features described in the next section.
+
+\bigskip
+\large\textbf{Features Extraction}
+\bigskip
+
+\normalsize
+
+In our work we use most common features for keystroke dynamics: \textbf{dwell time} (the latency between pressing and releasing a key) and \textbf{flight time} (in our case a time between key downs of two successive keys(\textbf{digraphs})). In our dataset we have 105 dwell times of unique keys/letter and 3099 flight times of unique digraphs, jointly 3204 features. Many of the features are not relevant, thus, we use the approach recommended in \cite{tappert2012keystroke}. \\
+
+We use the dwell time of the 8 most frequent keys/letters, in our case: 
+'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N. \\
+
+To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5×IQR$ or above $Q3 + 1.5×IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
 
 \bigskip
 \large\textbf{Methodology }
@@ -260,47 +298,11 @@ FOR user in TRAIN_SET:
     else:
             accuracy.append(0)
             
-ACCURACY = SUM(accuracy)/len(accurancy)
+ACCURACY = SUM(accuracy)/len(accuracy)
 
 \end{lstlisting}
 
 
-
-\bigskip
-\large\textbf{Dataset}
-\bigskip
-
-\normalsize
-For our work we have chosen the  \href{http://www3.cs.stonybrook.edu/~rbanerjee/project-pages/keystrokes/keystrokes.html}{Keystroke Patterns as Prosody in Digital Writings} data \cite{banerjee2014_emnlp} that contains 3 datasets: \begin{itemize}
-	\item \textbf{Restaurant Reviews}: The dataset consists of 1000 unique restoran reviews inputed by 500 unique users
-	\item \textbf{Gun Control}: The dataset consists of 800 unique essays on "Gun Control" from 400 unique users
-	\item \textbf{Gay Marriage}: The dataset consists of 800 unique essays on "Gay Merriage" topic  from 400 unique users
-\end{itemize}.
-The datasets were collected for the paper on using keystroke dynamics for 
-deception detection (recognizing deceptive/fake text) \cite{banerjee2014_emnlp}. The authors collected the data via Amazon Mechanical Turk. The Turkers were asked to write 2 free texts: a truthful (true) and deceptive (fake) texts. There were restaurant reviews, opinions on gay marriages and gun control (stored in three separate datasets). After completing their two review(true and fake), each Turker was asked to copy their own typing: copy1 is a copy of true text and copy2 is a copy of fake text (or vice versa). Therefore, the dataset contains keystroke samples for two free texts and the same re-typed copied texts. We merged all 3 datasets into 1 and used it in our analysis. \\
-
-The authors opened access to their dataset. The typical raw data looks like this: 
-\bigskip
-
-\begin{text}
-	0 MouseUp 0 0;16705 KeyDown 16;17170 KeyDown 16;17200 KeyDown 16;17229 KeyDown 16;17258 KeyDown 16;17287 KeyDown 16;17317 KeyDown 16;17346 KeyDown 16;17375 KeyDown 16;17404 KeyDown 16;17433 KeyDown 16;17463 KeyDown 16;17492 KeyDown 16; ...
-\end{text}
-\bigskip
-
-We used the raw data to extract the timing features described in the next section.
-
-\bigskip
-\large\textbf{Features Extraction}
-\bigskip
-
-\normalsize
-
-In our work we use most common features for keystroke dynamics: \textbf{dwell time} (the latency between pressing and releasing a key) and \textbf{flight time} (in our case a time between key downs of two successive keys(\textbf{digraphs})). In our dataset we have 105 dwell times of unique keys/letter and 3099 flight times of unique digraphs, jointly 3204 features. Many of the features are not relevant, thus, we use the approach recommended in \cite{tappert2012keystroke}. \\
-
-We use the dwell time of the 8 most frequent keys/letters, in our case: 
-'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N. \\
-
-To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5×IQR$ or above $Q3 + 1.5×IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
 
 \bigskip
 \large\textbf{Results}
