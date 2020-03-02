@@ -361,6 +361,12 @@ As expected, accuracy scores are relatively small. We had a small text dataset f
 
 Performance of the KNN method was measured by using 3 randomly chosen sub-samples: 100, 500 and 700 unique users. The corresponding accuracy's equal to 83\%, 67\% and 64\%. The training sample is a combination of a "true", "false" and "copy 2" texts. The test sample is contains users keystrokes from "copy 2" tests. We can see that the number of observation significantly influence on the ability to distinguish between the user tying pattern by which they can be recognized. As was suggested above, the increasing the number of observations we can add more information about the distribution of the keystrokes.
 
+After final hyperparameters tunning we've achieved ~94\% accuracy for whole dataset. The detailed explanation is  \href{https://github.com/vbyno/keystroke_dynamics/blob/master/hyperparameters_tunning.ipynb}{here}.
+\\
+\href{https://github.com/vbyno/keystroke_dynamics}{Code of report}
+\\
+\href{https://github.com/vbyno/keystroke_dynamics_app}{Application code}
+
 \bibliography{keystroke_dynamics}{}
 \bibliographystyle{plain}
 \end{document}
