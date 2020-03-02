@@ -172,7 +172,7 @@ Killourhy and Maxion selected  a 10-character password “.tie5Roanl” , recrui
 5. & Mahalanobis & 0.110 & 5. & Manhattan (scaled) & 0.601 \\
 \hline
 \end{tabular*}
-\caption{\textbf{Table 1:} The best algorithms / detectors for KD authentication by Killourhy and Maxion}
+\textbf{Table 1:} The best algorithms / detectors for KD authentication by Killourhy and Maxion
 \end{center}
 
 Interestingly, the simplest distance algorithms show the best results according to Killourhy and Maxion. There is also a good score for a machine learning SVM detector and a statistical z-score method. Neural Networks (standard) and k-means give the worst results out of 14 algorithms tested.
@@ -215,7 +215,7 @@ In our work we use most common features for keystroke dynamics: \textbf{dwell ti
 We use the dwell time of the 8 most frequent keys/letters, in our case: 
 'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N. \\
 
-To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5×IQR$ or above $Q3 + 1.5×IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
+To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5\times IQR$ or above $Q3 + 1.5 \times IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
 
 \bigskip
 \large\textbf{Methodology }
@@ -229,51 +229,43 @@ To remove outliers we used two approaches Interquartile Range (IQR) method (for 
 
 Killourhy and Maxion \cite{killourhy2009comparing} used Outlier Count (z-score) detector to authenticate impostors, and this simple statistical method displayed quite good results: the thirds lowest equal-error rate among the 14 detectors (see table above).  The idea of the method by Kollourhy and Maxion is to calculate mean vector $m_i$ and standard deviation vector $s_i$ for each feature of each known subject at the training phase. Then in the test phase the authors calculate the absolute z-score of each feature $i$ of the test vector: $|x_i-m_i|/s_i$. The anomaly score is a count how often the calculated z-score exceeds a threshold of 1.96. If the number is large (the authors do not specify how large), a subject is set to be an impostor. 
 
-We used the Outlier Count (z-score) method with some modifications for our identification goal. We calculate mean $m$ and standard deviation vectors $std$, that are $k \times 1$ vectors with means and standard deviations of each feature in Copy 1 text for a subset of our subjects in the train phase. In this method the number of features k is equal to 21.\\
-\\
-$
+We used the Outlier Count (z-score) method with some modifications for our identification goal. We calculate mean $m$ and standard deviation vectors $std$, that are $k \times 1$ vectors with means and standard deviations of each feature in Copy 1 text for a subset of our subjects in the train phase. In this method the number of features k is equal to 21.
+$$
 \overline{m} = \frac{1}{n}i^T x
-$\\
-\\
+$$
  where $x$ is a $n\times 1$ dimensional time vector of the feature $i$ in the Copy 1 task. $n$ is a count of the $ith$ feature occurrence in the Copy1 text of each subject in the train set. \\
-$
-\\
+$$
 s^2 = \frac{1}{n-1} x^T M x
-$\\
+$$
 \\
-where M  is an idempotent matrix: \\
-\\
-$
+where M  is an idempotent matrix: 
+$$
 M = I - \frac{1}{n}ii^T
-$\\
+$$
 
 where $x$ is a $n\times 1$ dimensional time vector of the feature $i$ in the Copy 1 task. $n$ is a count of the $ith$ feature occurrence in the Copy1 text of each subject in the train set.\\
 \\
-In the test phase we calculate z-score, a $n \times m$ matrix. N is a number of features (21 for this method), while m is the maximum occurrence of a feature for a subject in the test phase.\\
-\\
-$
+In the test phase we calculate z-score, a $n \times m$ matrix. N is a number of features (21 for this method), while m is the maximum occurrence of a feature for a subject in the test phase.
+$$
 zscore = \frac{|X^{test} - m|}{s}
-$ \\
-\\
+$$
 where $X^{test}$ is a $n\times m$ matrix of the $ith$ feature in the texts of subjects in the test set. $M$ is equal to the length of the largest feature vector for a given subject in the test phase. \\
 \\
 In the next step we construct Zcount matrix, that $n \times m$ matrix such that:
-\\
-$
+$$
 zcount_{rule} = \begin{cases} 1, & \mbox{if } zscore \mbox{ $<$ 1.96} \\ 0, & \mbox{ } \mbox{ otherwise} \end{cases}
-$\\
+$$
+Next, we need the vector that count relative number of times each feature is accepted (smaller than our threshold). To make $zcount_r$ vector (a $n \times 1$ vector) we sum each row of of the Zcount matrix and divide by the count of 1s in each row.
 \\
-Next, we need the vector that count relative number of times each feature is accepted (smaller than our threshold). To make $zcount_r$ vector (a $n \times 1$ vector) we sum each row of of the Zcount matrix and divide by the count of 1s in each row. \\
 \\
-The closer this $zcount_r$ vector to a vector of ones (i vector), the closer is a tested subject's keyprint style to true subject. To find out this distance we use the Euclidian distance metric: \\
-\\
-$
+The closer this $zcount_r$ vector to a vector of ones (i vector), the closer is a tested subject's keyprint style to true subject. To find out this distance we use the Euclidian distance metric: 
+$$
 d = ||zcount_r - i||
-$\\
-\\
+$$
+
 The subject and task with the smallest distance is the predicted subject. Accuracy measure is the relative number of times we correctly predict the true subject.
 
-
+\newpage
 \small\textbf{PSEUDOCODE}
 
 \normalsize
@@ -314,13 +306,9 @@ ACCURACY = SUM(accuracy)/len(accuracy)
 
 \normalsize
 
-We tested our Z-score identification methodology on 3 randomly selected subsets of subjects: 20, 50 and 100 subjects. We obtained the corresponding accuracy metrics of 80\%, 68\% and 57\%. The prevailing share of the correctly identified subjects were recognized by copy2 text: within 57 \% of correctly selected subjects, 60 \% where recognized by copy2 texts, 17 \% by true reviews and 21 \% by fake reviews. This results prove that keystroke patterns for free text and pre-defined re-typed text are different, as the algorithm recognized primarily not the same texts with the same features (copy1 text of a user is the same with either true or fake reviews), but the re-typing keyprint pattern of a user for a different text.
+We tested our Z-score identification methodology on 3 randomly selected subsets of subjects: 20, 50 and 100 subjects. We obtained the corresponding accuracy metrics of 80\%, 68\% and 57\%. The prevailing share of the correctly identified subjects were recognized by copy2 text: within 57 \% of correctly selected subjects, 60 \% where recognized by copy2 texts, 17 \% by true reviews and 21 \% by fake reviews. This results prove that keystroke patterns for free text and pre-defined re-typed text are different, as the algorithm recognized primarily not the same texts with the same features (`copy1` text of a user is the same with either true or fake reviews), but the re-typing keyprint pattern of a user for a different text.
 
 As expected, accuracy scores are relatively small. We had a small text dataset for a user: our model is trained on 1 text sample with no repetitions. Moreover, long texts (as well as free text) requires more sophisticated feature extraction techniques, as simple digraphs work good for passwords, usernames and digits, while in long text not only digraphs, but their positioning is potentially important. Moreover, not all features are equally important - some of them are more discriminating than the other, while in our z-score algorithm all features are treated equally, also disregarding how often they appear in the text of a given subject.
-
-
-
-
 
 \bibliography{keystroke_dynamics}{}
 \bibliographystyle{plain}
