@@ -4,11 +4,11 @@
   "kd_final_report.aux" 0 -1 0 "pdflatex"
   "keystroke_dynamics.bib" 1583176190 5492 bab1e34e9d15f8d7c98f1c41820ceb22 ""
   (generated)
-  "kd_final_report.blg"
   "kd_final_report.bbl"
-["pdflatex"] 1583177847 "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.tex" "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.pdf" "kd_final_report" 1583177847
-  "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.aux" 1583177847 8 a94a2480d3289e625eea47cd1b285758 ""
-  "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.tex" 1583177841 24263 f7466fa3e3b6c536dacfb821192524f2 ""
+  "kd_final_report.blg"
+["pdflatex"] 1583177974 "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.tex" "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.pdf" "kd_final_report" 1583177974
+  "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.aux" 1583177974 8 a94a2480d3289e625eea47cd1b285758 ""
+  "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.tex" 1583177972 24269 3490475f0d87a789e194ea7791a230c2 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy8.tfm" 1246382020 1120 200be8b775682cdf80acad4be5ef57e4 ""
@@ -115,11 +115,11 @@
   "kd_final_report.aux" 0 -1 0 "pdflatex"
   "kd_final_report.bbl" 0 -1 0 "bibtex kd_final_report"
   "kd_final_report.out" 0 -1 0 "pdflatex"
-  "kd_final_report.tex" 1583177841 24263 f7466fa3e3b6c536dacfb821192524f2 ""
+  "kd_final_report.tex" 1583177972 24269 3490475f0d87a789e194ea7791a230c2 ""
   (generated)
-  "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.pdf"
-  "kd_final_report.out"
-  "kd_final_report.aux"
-  "kd_final_report.pdf"
   "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.log"
   "kd_final_report.log"
+  "kd_final_report.pdf"
+  "kd_final_report.aux"
+  "kd_final_report.out"
+  "/Users/vbyno/dev/ucu/01_linear_algebra/keystroke_dynamics/kd_final_report.pdf"
