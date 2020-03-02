@@ -1,4 +1,3 @@
-
 \documentclass[12pt,a4]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsmath,amsthm}
@@ -10,10 +9,10 @@
 \usepackage{graphicx}%
 \usepackage{datetime,verbatim}
 \usepackage{cite}
-\usepackage{hyperref} 
+\usepackage{hyperref}
 \usepackage{listings}
 
-%%%%%%%%%%%%%%%%%%%%%    page setup   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%    page setup   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \textheight=245truemm \textwidth=160truemm \hoffset=-8truemm
 \voffset=-23truemm
@@ -108,7 +107,7 @@
 \bigskip
 
 \normalsize
-In this course project, we will study keystroke dynamics as a method to identify people, using their typing rhythms. We use z-score and KNN methods that perform well on tasks of people authentication based on small text inputs, to recognize identity of a person, using her predefined (re-typed) large text input. We verify how well unconstrained free text typing patterns of a person help to identify her if we know how this person re-types the same text input. We also compare performance of z-score and KNN methods for the identification tasks. 
+In this course project, we will study keystroke dynamics as a method to identify people, using their typing rhythms. We use z-score and KNN methods that perform well on tasks of people authentication based on small text inputs, to recognize identity of a person, using her predefined (re-typed) large text input. We verify how well unconstrained free text typing patterns of a person help to identify her if we know how this person re-types the same text input. We also compare performance of z-score and KNN methods for the identification tasks.
 
 \bigskip
 
@@ -133,7 +132,7 @@ In this report we use two simple statistical and machine learning algorithms, Z-
 
 \textbf{Hypothesis 1}: Z-score and KNN help to identify a user of large text inputs, but accuracy is smaller compared to small inputs. \\
 
-\textbf{Hypothesis 2}: Free (unconstrained) text inputs can help to identify the identity of a person, who typed a predefined text input. 
+\textbf{Hypothesis 2}: Free (unconstrained) text inputs can help to identify the identity of a person, who typed a predefined text input.
 
 \bigskip
 
@@ -160,9 +159,9 @@ Killourhy and Maxion selected  a 10-character password “.tie5Roanl” , recrui
 \hline
  & \textbf{Detector} & \textbf{EER} & & \textbf{Detector} & \textbf{ZMFAR} \\
  \hline
-1. & Manhattan (scaled) & 0.096 & 1. & Nearest Neighbor (Mahalanobis) & 0.468 \\ 
+1. & Manhattan (scaled) & 0.096 & 1. & Nearest Neighbor (Mahalanobis) & 0.468 \\
 \hline
-2. & Nearest Neighbor (Mahalanobis) & 0.100 & 2. & Mahalanobis & 0.482 \\ 
+2. & Nearest Neighbor (Mahalanobis) & 0.100 & 2. & Mahalanobis & 0.482 \\
 \hline
 3. & Outlier Count (z-score) & 0.102 & 3. & Mahalanobis (normed) & 0.482 \\
 
@@ -179,7 +178,7 @@ Interestingly, the simplest distance algorithms show the best results according 
 
 Other researchers have been questioning the results of Killourhy and Maxion, testing algorithms on different text inputs (long-text) and datasets (unconstrained datasets of free text). Overall, statistical and distance methods have been losing popularity, while machine learning approaches are gaining pace in the modern times \cite{Liakat:2017}. Support Vector Machine (SVM) is  considered by some researchers as a prevailing machine learning classification approach that produces good results and has reasonable complexity \cite{Liakat:2017}, \cite{raul2020comprehensive}.
 
-Concerning identification research, scholars also show quite good accuracy (over 90\%)\cite{banerjee2012biometric}, however, the number of subjects are usually small - below 35 people. 
+Concerning identification research, scholars also show quite good accuracy (over 90\%)\cite{banerjee2012biometric}, however, the number of subjects are usually small - below 35 people.
 
 \bigskip
 \large\textbf{Dataset}
@@ -191,10 +190,10 @@ For our work we have chosen the  \href{http://www3.cs.stonybrook.edu/~rbanerjee/
 	\item \textbf{Gun Control}: The dataset consists of 800 unique essays on "Gun Control" from 400 unique users
 	\item \textbf{Gay Marriage}: The dataset consists of 800 unique essays on "Gay Merriage" topic  from 400 unique users
 \end{itemize}.
-The datasets were collected for the paper on using keystroke dynamics for 
+The datasets were collected for the paper on using keystroke dynamics for
 deception detection (recognizing deceptive/fake text) \cite{banerjee2014_emnlp}. The authors collected the data via Amazon Mechanical Turk. The Turkers were asked to write 2 free texts: a truthful (true) and deceptive (fake) texts. There were restaurant reviews, opinions on gay marriages and gun control (stored in three separate datasets). After completing their two review(true and fake), each Turker was asked to copy their own typing: copy1 is a copy of true text and copy2 is a copy of fake text (or vice versa). Therefore, the dataset contains keystroke samples for two free texts and the same re-typed copied texts. We merged all 3 datasets into 1 and used it in our analysis. \\
 
-The authors opened access to their dataset. The typical raw data looks like this: 
+The authors opened access to their dataset. The typical raw data looks like this:
 \bigskip
 
 \begin{text}
@@ -215,7 +214,7 @@ In order to collect our own data, we've created and deployed a \href{https://pow
 	\includegraphics[width=0.9\linewidth]{images/web-app.png}
 	\label{fig:web-app.png}
 \end{center}
-The user has to login to start to enter the text. After a user submits entered text, the keystroke metadata is saved in the database. 
+The user has to login to start to enter the text. After a user submits entered text, the keystroke metadata is saved in the database.
 Predefined admin users could download the keystroke data of all users. Although the keystroke data is anonymized, it does not contain the user's login/email or other personal data. It is mapped to self-generated UUID which is unique for each user. So, it is possible to distinguish the keystroke patterns and use this data for model learning.
 
 At the current moment, we've collected 28 text inputs from 17 unique users.
@@ -226,12 +225,17 @@ At the current moment, we've collected 28 text inputs from 17 unique users.
 
 \normalsize
 
-In our work we use most common features for keystroke dynamics: \textbf{dwell time} (the latency between pressing and releasing a key) and \textbf{flight time} (in our case a time between key downs of two successive keys(\textbf{digraphs})). In our dataset we have 105 dwell times of unique keys/letter and 3099 flight times of unique digraphs, jointly 3204 features. Many of the features are not relevant, thus, we use the approach recommended in \cite{tappert2012keystroke}. \\
+The main problem we have encountered with is the proper feature selection. The user can be identified by his typing behavior. This behavior can be expressed by the timing of different key-presses. The number of keys that include a single keypress or keypress of two successive keys increases the amount of features that we can use in modelling. So we tried to use several set of them in order to check their influence on results. \\
 
-As the starting point we used the dwell time of the 8 most frequent keys/letters, in our case: 
+In our work we used: \textbf{dwell time} (the latency between pressing and releasing a key) and \textbf{flight time} (in our case a time between key downs of two successive keys(\textbf{digraphs})). In our dataset we have 105 dwell times of unique keys/letter and 3099 flight times of unique digraphs, jointly 3204 features. Many of the features are not relevant, thus, we use the approach recommended in \cite{tappert2012keystroke}. \\
+
+For z-score method we used the dwell time of the 8 most frequent keys/letters, in our case:
+'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N.
+To remove outliers we used approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5×IQR$ or above $Q3 + 1.5×IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. \\
+
+As the starting point we used the dwell time of the 8 most frequent keys/letters, in our case:
 'E', 'A', 'R', 'I', 'O', 'T', 'N', 'S' and 'space'. And the flight time of the 12 most frequent digraphs, in our case: 'S\_space', 'space\_A', 'D\_space', 'E\_space', 'space\_T', 'backspace\_backspace', 'T\_H', 'H\_E', 'A\_N', 'T\_space', 'R\_E', 'I\_N. \\
 
-To remove outliers we used two approaches Interquartile Range (IQR) method (for z-score identifier) and standard deviation method (for KNN). According to IQR we removed data points below $Q1 – 1.5\times IQR$ or above $Q3 + 1.5 \times IQR$, where Q1 and Q3 are the first and third quantities, IQR = Q3-Q1. The standard deviation methods suggests removing data points that are far (more than 2 standard deviations).\\
 
 \bigskip
 \large\textbf{Methodology }
@@ -243,7 +247,7 @@ To remove outliers we used two approaches Interquartile Range (IQR) method (for 
 
 \normalsize
 
-Killourhy and Maxion \cite{killourhy2009comparing} used Outlier Count (z-score) detector to authenticate impostors, and this simple statistical method displayed quite good results: the thirds lowest equal-error rate among the 14 detectors (see table above).  The idea of the method by Kollourhy and Maxion is to calculate mean vector $m_i$ and standard deviation vector $s_i$ for each feature of each known subject at the training phase. Then in the test phase the authors calculate the absolute z-score of each feature $i$ of the test vector: $|x_i-m_i|/s_i$. The anomaly score is a count how often the calculated z-score exceeds a threshold of 1.96. If the number is large (the authors do not specify how large), a subject is set to be an impostor. 
+Killourhy and Maxion \cite{killourhy2009comparing} used Outlier Count (z-score) detector to authenticate impostors, and this simple statistical method displayed quite good results: the thirds lowest equal-error rate among the 14 detectors (see table above).  The idea of the method by Kollourhy and Maxion is to calculate mean vector $m_i$ and standard deviation vector $s_i$ for each feature of each known subject at the training phase. Then in the test phase the authors calculate the absolute z-score of each feature $i$ of the test vector: $|x_i-m_i|/s_i$. The anomaly score is a count how often the calculated z-score exceeds a threshold of 1.96. If the number is large (the authors do not specify how large), a subject is set to be an impostor.
 
 We used the Outlier Count (z-score) method with some modifications for our identification goal. We calculate mean $m$ and standard deviation vectors $std$, that are $k \times 1$ vectors with means and standard deviations of each feature in Copy 1 text for a subset of our subjects in the train phase. In this method the number of features k is equal to 21.
 $$
@@ -254,7 +258,7 @@ $$
 s^2 = \frac{1}{n-1} x^T M x
 $$
 \\
-where M  is an idempotent matrix: 
+where M  is an idempotent matrix:
 $$
 M = I - \frac{1}{n}ii^T
 $$
@@ -274,7 +278,7 @@ $$
 Next, we need the vector that count relative number of times each feature is accepted (smaller than our threshold). To make $zcount_r$ vector (a $n \times 1$ vector) we sum each row of of the Zcount matrix and divide by the count of 1s in each row.
 \\
 \\
-The closer this $zcount_r$ vector to a vector of ones (i vector), the closer is a tested subject's keyprint style to true subject. To find out this distance we use the Euclidian distance metric: 
+The closer this $zcount_r$ vector to a vector of ones (i vector), the closer is a tested subject's keyprint style to true subject. To find out this distance we use the Euclidian distance metric:
 $$
 d = ||zcount_r - i||
 $$
@@ -304,13 +308,36 @@ FOR user in TRAIN_SET:
             accuracy.append(1)
     else:
             accuracy.append(0)
-            
+
 ACCURACY = SUM(accuracy)/len(accuracy)
 
 \end{lstlisting}
 
 
 
+\bigskip
+\small\textbf{Nearest Neighbour Algorithm on PCA features}
+\bigskip
+
+\normalsize
+
+The nearest neighbour detector aims to define the smallest distance between the the feature vectors. The input data is considered to be a set of most spread digraphs and letters per each user.  The accuracy of the method is calculated by the dividing number of predicted users over all number of users.
+
+The distance that is used to find the nearest neighbour is Euclidean Distance:\\
+
+
+$$
+d(a,b) = d(b,a) = \sqrt{\sum_{n=1}^{n} (a_i - b_i)^2},
+$$\\
+
+where $a, b$ - are the samples of two users, $n$ - the number of features we consider to use to describe the specifics of each  user behavior.\\
+
+So in order to identify the user we need to calculate the distances between feature vectors of all users and find the smallest distance. This smallest distance will show us the most similar user to the one we wont to identify. We take the number of neighbors equal to 1 because we have only one observation in the test sample that is responsible for the entire class it belongs to.
+
+The problem with big amount of features was resolved by applying the PCA that cover the 90\% of the variance and left only 9 input variables.
+
+
+\newpage
 \bigskip
 \large\textbf{Results}
 \bigskip
@@ -324,6 +351,15 @@ ACCURACY = SUM(accuracy)/len(accuracy)
 We tested our Z-score identification methodology on 3 randomly selected subsets of subjects: 20, 50 and 100 subjects. We obtained the corresponding accuracy metrics of 80\%, 68\% and 57\%. The prevailing share of the correctly identified subjects were recognized by copy2 text: within 57 \% of correctly selected subjects, 60 \% where recognized by copy2 texts, 17 \% by true reviews and 21 \% by fake reviews. This results prove that keystroke patterns for free text and pre-defined re-typed text are different, as the algorithm recognized primarily not the same texts with the same features (`copy1` text of a user is the same with either true or fake reviews), but the re-typing keyprint pattern of a user for a different text.
 
 As expected, accuracy scores are relatively small. We had a small text dataset for a user: our model is trained on 1 text sample with no repetitions. Moreover, long texts (as well as free text) requires more sophisticated feature extraction techniques, as simple digraphs work good for passwords, usernames and digits, while in long text not only digraphs, but their positioning is potentially important. Moreover, not all features are equally important - some of them are more discriminating than the other, while in our z-score algorithm all features are treated equally, also disregarding how often they appear in the text of a given subject.
+
+
+\medskip
+\small\textbf{KNN with PCA Identification}
+\medskip
+
+\normalsize
+
+Performance of the KNN method was measured by using 3 randomly chosen sub-samples: 100, 500 and 700 unique users. The corresponding accuracy's equal to 83\%, 67\% and 64\%. The training sample is a combination of a "true", "false" and "copy 2" texts. The test sample is contains users keystrokes from "copy 2" tests. We can see that the number of observation significantly influence on the ability to distinguish between the user tying pattern by which they can be recognized. As was suggested above, the increasing the number of observations we can add more information about the distribution of the keystrokes.
 
 \bibliography{keystroke_dynamics}{}
 \bibliographystyle{plain}
